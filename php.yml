@@ -1,0 +1,16 @@
+version: '3.5'
+services:
+  php:
+    build: ./docker/php/php-fpm72
+#    volumes:
+#      - ./php/conf/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+#      - ./php/conf/docker.conf:/usr/local/etc/php-fpm.d/docker.conf
+#      - ./php/conf/www.conf:/usr/local/etc/php-fpm.d/www.conf
+#      - ./run:/var/run/
+#      - ./www:/var/www/html
+    networks:
+      - frontend
+    restart: always
+    container_name: l-php-test-72
+networks:
+  frontend:

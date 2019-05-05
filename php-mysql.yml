@@ -1,0 +1,37 @@
+version: '3.5'
+services:
+  mysql:
+    build: docker/mysql/mysql-5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mysql_database
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_pw
+    ports:
+      - "13306:3306"
+#    volumes_from:
+#      - data
+#    volumes:
+#      - ../application/initial.sql:/docker-entrypoint-initdb.d/initial.sql
+    container_name: l-mysql-test
+  php:
+    build: docker/php/php-fpm-7.3
+#    volumes:
+#      - ./php/conf/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+#      - ./php/conf/docker.conf:/usr/local/etc/php-fpm.d/docker.conf
+#      - ./php/conf/www.conf:/usr/local/etc/php-fpm.d/www.conf
+#      - ./run:/var/run/
+#      - ./www:/var/www/html
+#    networks:
+#      - frontend
+    restart: always
+    container_name: l-php-test
+    links:
+      - mysql
+    environment:
+      DATABASE_HOST: 'mysql'
+      DATABASE_NAME: 'mysql_database'
+      DATABASE_USER: 'mysql_user'
+      DATABASE_PASSWORD: 'mysql_pw'
+#networks:
+#  frontend:

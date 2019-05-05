@@ -1,0 +1,17 @@
+version: '3.5'
+services:
+  redis:
+    build: docker/redis
+    ports:
+      - "16379:6379"
+    volumes:
+      - ./docker/redis/conf/redis.conf:/usr/local/etc/redis.conf
+      - ./docker/redis/data:/usr/local/redis/data
+      - ./docker/redis/redis.log:/usr/local/redis/redis.log
+    networks:
+      - backend
+    restart: always
+    container_name: l-redis
+
+networks:
+  backend:

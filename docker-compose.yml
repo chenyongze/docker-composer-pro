@@ -1,0 +1,47 @@
+version: '3.5'
+services:
+  openresty:
+    build: docker/openresty
+    volumes:
+      - ./docker/openresty/conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/openresty/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./app/www:/usr/local/openresty/nginx/app
+      - ./app/run:/var/run/
+    ports:
+      # - 0.0.0.0:89:80
+      - "89:80"
+      - "1443:443"
+    networks:
+      - frontend
+    restart: always
+    container_name: l-openresty
+  php:
+    build: ./docker/php/php-fpm-7.3.2
+    volumes:
+      - ./docker/php/php-fpm-7.3.2/php/conf/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - ./docker/php/php-fpm-7.3.2/conf/docker.conf:/usr/local/etc/php-fpm.d/docker.conf
+      - ./docker/php/php-fpm-7.3.2/conf/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./app/run:/var/run/
+      - ./app/www:/var/www/html
+    networks:
+      - frontend
+    restart: always
+    container_name: l-php
+
+  # mysql:
+  #   build: ./mysql
+  #   ports:
+  #     - "13306:3306"
+  #   volumes:
+  #     - ./mysql/data:/var/lib/mysql
+  #     - ./mysql/conf/my.cnf:/etc/my.cnf
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 123456
+  #   networks:
+  #     - backend
+  #   restart: always
+  #   container_name: l-mysql
+
+networks:
+  frontend:
+#  backend:

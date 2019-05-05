@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+  openresty-t:
+    build: ./docker/openresty
+    volumes:
+      - ./docker/openresty/conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/openresty/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./app/www:/usr/local/openresty/nginx/app
+      - ./app/run:/var/run/
+      - ./app/lualib:/usr/local/openresty/site/lualib
+    ports:
+      - "189:80"
+      - "2443:443"
+    networks:
+      - frontend
+    restart: always
+    container_name: openresty-t
+networks:
+  frontend:

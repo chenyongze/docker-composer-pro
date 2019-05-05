@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - "180:80"
+      - "1443:443"
+    volumes:
+      - ./app/www:/var/www/html
+    links:
+      - php-x
+    restart: always
+    container_name: nginx-x
+
+  php-x:
+    build: ./docker/php/php-fpm72
+    volumes:
+      - ./app/www:/var/www/html
+    restart: always
+    container_name: php-x

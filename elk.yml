@@ -1,0 +1,17 @@
+#  docker-compose -f elk.yml build
+version: '3.5'
+services:
+  elk:
+    build: ./docker/elk
+    environment:
+      TERM: dotalk
+    ports:
+      - 5044:5044
+      - 5601:5601
+      - 9200:9200
+    restart: always
+    container_name: l-elk
+    networks:
+      - backend
+networks:
+  backend:

@@ -1,0 +1,12 @@
+#  docker-compose -f jenkins.yml build
+version: '3'
+services:
+  jenkins:
+    build: docker/jenkins
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+#    volumes:
+#      - './jenkins/jenkins_home:/var/jenkins_home'
+    container_name: l_jenkins
+    restart: always

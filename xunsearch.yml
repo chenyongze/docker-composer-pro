@@ -1,0 +1,14 @@
+version: '3.5'
+services:
+  xunsearch:
+    build: docker/xunsearch
+    ports:
+      - "8383:8383"
+      - "8384:8384"
+    networks:
+      - backend
+    restart: always
+    container_name: l-xunsearch
+
+networks:
+  backend:
