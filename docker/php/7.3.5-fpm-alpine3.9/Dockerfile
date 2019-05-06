@@ -1,15 +1,11 @@
-FROM daocloud.io/library/php:7.3.2-fpm-alpine3.8
+FROM php:7.3.5-fpm-alpine3.9
 MAINTAINER Yongze Chen <yongze@dingtalk.com>
-RUN set -ex \
-    && apk add --no-cache
+
 # Set Timezone Environments
 ENV TIMEZONE  Asia/Shanghai
-
-RUN apk add --update tzdata  \
-    && cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime  \
-    && echo "${TIMEZONE}" > /etc/timezone  \
-    && apk del tzdata  \
-    && apk add --no-cache --virtual .build-deps \
+ENV SWOOLE_VERSION 4.3.3
+RUN apk add --no-cache --virtual .build-deps \
+                 tzdata \
                  curl \
                  g++ \
                  make \
@@ -22,7 +18,6 @@ RUN apk add --update tzdata  \
                  libzip-dev \
                  bash \
                  openssh \
-                 libssl1.0 \
                  libxslt-dev \
                  libjpeg-turbo-dev \
                  libwebp-dev \
@@ -33,6 +28,8 @@ RUN apk add --update tzdata  \
                  freetds-dev  \
                  libmemcached-dev  \
                  cyrus-sasl-dev  \
+    && cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime  \
+    && echo "${TIMEZONE}" > /etc/timezone  \
     && docker-php-source extract  \
     && docker-php-ext-configure pdo  \
     && docker-php-ext-configure pdo_mysql  \
@@ -68,12 +65,18 @@ RUN apk add --update tzdata  \
                            shmop \
     && docker-php-source delete  \
     && apk del .build-deps  \
-
     && ln -sf /dev/stdout /usr/local/var/log/php-fpm.access.log  \
     && ln -sf /dev/stderr /usr/local/var/log/php-fpm.error.log  \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer  \
     && curl --location --output /usr/local/bin/phpunit https://phar.phpunit.de/phpunit.phar  \
-    && chmod +x /usr/local/bin/phpunit
+    && chmod +x /usr/local/bin/phpunit \
+    && cd ~ \
+    && wget https://github.com/swoole/swoole-src/archive/v"${SWOOLE_VERSION}".tar.gz \
+    && tar -zxvf v"${SWOOLE_VERSION}".tar.gz \
+    && mkdir -p /usr/src/php/ext \
+    && mv swoole-src-"${SWOOLE_VERSION}" /usr/src/php/ext/swoole \
+    && docker-php-ext-install swoole \
+    && rm -rf v"${SWOOLE_VERSION}".tar.gz
 
 #RUN cd ~ \
 #    && wget https://github.com/phpredis/phpredis/archive/4.3.0.tar.gz \

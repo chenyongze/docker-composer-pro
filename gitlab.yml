@@ -1,0 +1,16 @@
+version: '3'
+services:
+  gitlab:
+    container_name: gitlab
+    image: gitlab/gitlab-ce:latest
+#    volumes:
+#      - /Users/pedoe/Documents/FrontEnd/docker/gitlab_compose/gitlab/config:/etc/gitlab
+#      - /Users/pedoe/Documents/FrontEnd/docker/gitlab_compose/gitlab/logs:/var/log/gitlab
+#      - /Users/pedoe/Documents/FrontEnd/docker/gitlab_compose/gitlab/data:/var/opt/gitlab
+    ports:
+      - 10080:80
+      - 122:22
+      - 3443:443
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url "http://gitlab"

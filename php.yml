@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   php:
-    build: ./docker/php/php-fpm72
+    build: ./docker/php/7.3.5-fpm-alpine3.9
 #    volumes:
 #      - ./php/conf/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
 #      - ./php/conf/docker.conf:/usr/local/etc/php-fpm.d/docker.conf
@@ -11,6 +11,6 @@ services:
     networks:
       - frontend
     restart: always
-    container_name: l-php-test-72
+    container_name: l-php-test-735-3
 networks:
   frontend:
