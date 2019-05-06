@@ -1,18 +1,18 @@
 version: '2'
 services:
-  web:
-    build: ./docker/python/python37
+  python:
+    build: ./docker/python/3.8.0a3-alpine3.9
     ports:
       - "8189:5000"
     volumes:
-      - ./docker/python/python37/app:/app
+      - ./docker/python/3.8.0a3-alpine3.9/app:/app
     depends_on:
       - redis
     container_name: flask-web
   redis:
-    build: ./docker/redis
+    build: ./docker/redis/redis-latest
     volumes:
-      - ./docker/redis/conf/redis.conf:/usr/local/etc/redis.conf
-      - ./docker/redis/data:/usr/local/redis/data
-      - ./docker/redis/redis.log:/usr/local/redis/redis.log
-    container_name: redis-b-8
+      - ./docker/redis/redis-latest/conf/redis.conf:/usr/local/etc/redis.conf
+      - ./docker/redis/redis-latest/data:/usr/local/redis/data
+      - ./docker/redis/redis-latest/redis.log:/usr/local/redis/redis.log
+    container_name: redis-b-9
